@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/components/my_button.dart';
+import 'package:untitled/components/login_button.dart';
 import 'package:untitled/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:untitled/pages/register_page.dart';
 //import 'package:cloud_firestore/cloud_firestore.dart';
 
 
@@ -83,7 +84,7 @@ class LoginPage extends StatelessWidget{
                 const SizedBox(height: 15),
 
                 //sign in button
-                MyButton(onTap: signUserIn,),
+                LoginButton(onTap: signUserIn,),
 
 
                 const SizedBox(height: 30),
@@ -119,14 +120,22 @@ class LoginPage extends StatelessWidget{
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      'Create your account',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  RegisterPage()));
+                      },
+                      child: const Text(
+                        'Create your account',
+                        //return RegisterPage()
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
+
                 ),
 
 
@@ -144,6 +153,7 @@ class LoginPage extends StatelessWidget{
                     const SizedBox(width: 4),
                     const Text(
                       'Continue as guest',
+                      //return HomePage()
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
