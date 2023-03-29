@@ -123,7 +123,7 @@ class LoginPage extends StatelessWidget{
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  RegisterPage()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   RegisterPage()));
                       },
                       child: const Text(
                         'Create your account',

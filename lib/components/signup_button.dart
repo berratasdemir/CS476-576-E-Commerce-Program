@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 
 class SignupButton extends StatelessWidget {
   final Function()? onTap;
@@ -18,12 +18,15 @@ class SignupButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: const Center(
+
           child: Text(
             "Sign Up",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
+
+
             ),
           ),
         ),

@@ -1,28 +1,55 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/components/signup_button.dart';
-
-import '../components/login_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/my_textfield.dart';
 
+//stateless was changed to stateful
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+   RegisterPage({super.key});
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmpasswordController = TextEditingController();
+
 
   //sign user out method
   void signUserOut(){
     FirebaseAuth.instance.signOut();
   }
 
-  void signUserIn()async{
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailController.text,
-      password: passwordController.text,
-    );
+  bool passwordConfirmed(){
+    if(passwordController.text.trim()==
+        confirmpasswordController.text.trim()){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  Future saveUser() async {
+    if (passwordConfirmed()) {
+      //create user
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+
+
+      //add user details
+      addUserDetails(emailController.text.trim(),
+      );
+    }
 
   }
 
+  Future addUserDetails(String email) async{
+    await FirebaseFirestore.instance.collection("users").add({
+      'email': email,
+      'role': "storeowner",
+    });
+  }
 
 @override
 Widget build(BuildContext context){
@@ -72,15 +99,39 @@ Widget build(BuildContext context){
 
                   //confirm your password
                   MyTextField(
-                    controller: passwordController,
+                    controller: confirmpasswordController,
                     hintText: 'Confirm Password',
                     obscureText: true,
                   ),
 
-                  const SizedBox(height: 30),
+
+                  const SizedBox(height: 10),
+/*
+                  //choose role dropdown
+                  DropdownButton<String>(
+                    value: dropdownValue,
+                    items: <String>['User','Store Owner'].map<DropdownMenuItem<String>>((String value){
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(fontSize: 20),
+                        ),
+
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue){
+                      setState((){
+                        dropdownValue = newValue!;
+                      });
+                    },
+                  ),
+
+*/
+                  const SizedBox(height: 10),
 
                   //sign in button
-                  SignupButton(onTap: signUserIn,),
+                  SignupButton(onTap: saveUser,),
 
 
                   const SizedBox(height: 20),
@@ -126,8 +177,6 @@ Widget build(BuildContext context){
                       ),
                     ],
                   ),
-
-
                 ],
               ),
             ),
@@ -136,3 +185,7 @@ Widget build(BuildContext context){
   );
 }
 }
+
+
+
+
