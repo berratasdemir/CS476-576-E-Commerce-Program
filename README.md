@@ -1,4 +1,4 @@
-# untitled
+# E-Commerce Term Project
 
 A new Flutter project.
 
