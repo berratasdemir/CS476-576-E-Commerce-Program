@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'account_page.dart';
+import 'favorites_page.dart';
+import 'shopping_cart_page.dart';
+
+
 class HomePage extends StatefulWidget {
 
   const HomePage({super.key});
@@ -18,20 +23,35 @@ class Footer extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                );
+              },
               icon : Image.asset('lib/icons/home.png', fit: BoxFit.scaleDown,),
 
               // Set the button's minimum size to 200x50 pixels
             ),
 
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FavoritesPage()),
+                );
+              },
               icon : Image.asset('lib/icons/heart.png', fit: BoxFit.scaleDown,),
 
               // Set the button's minimum size to 200x50 pixels
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ShoppingCartPage()),
+                );
+              },
               icon : Image.asset('lib/icons/shopping-cart.png', fit: BoxFit.scaleDown,),
 
               // Set the button's minimum size to 200x50 pixels
@@ -57,7 +77,10 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(
             icon: Image.asset('lib/icons/person.png'),
             onPressed: () {
-              // handle menu button press
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AccountPage()),
+              );
             },
           ),
 
