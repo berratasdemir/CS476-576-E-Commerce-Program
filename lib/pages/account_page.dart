@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'favorites_page.dart';
 import 'home_page.dart';
 import 'shopping_cart_page.dart';
+
 
 class AccountPage extends StatefulWidget {
 

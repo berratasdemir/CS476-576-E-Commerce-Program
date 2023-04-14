@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/pages/login_page.dart';
-import 'storeowner_home_page.dart';
+import 'home_page.dart';
+
 
 class AuthPage extends StatelessWidget{
   const AuthPage({super.key});
@@ -14,7 +15,7 @@ class AuthPage extends StatelessWidget{
         builder: (context,snapshot){
           //user log-in
           if(snapshot.hasData){
-            return const HomePage(); //storeowner page
+            return const HomePage();
           }
           else{
             return LoginPage();

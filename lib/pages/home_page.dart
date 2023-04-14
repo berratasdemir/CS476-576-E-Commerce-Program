@@ -1,5 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'account_page.dart';
 import 'favorites_page.dart';
 import 'shopping_cart_page.dart';
@@ -12,6 +12,10 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+void signUserOut(){
+  FirebaseAuth.instance.signOut();
+}
+
 class Footer extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -75,6 +79,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         children: [
           IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: signUserOut
+          ),
+          const SizedBox(width: 5),
+          IconButton(
             icon: Image.asset('lib/icons/person.png'),
             onPressed: () {
               Navigator.push(
@@ -87,7 +96,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        SizedBox(width: 10), // Add a fixed width between the icons
+        const SizedBox(width: 10), // Add a fixed width between the icons
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () {},

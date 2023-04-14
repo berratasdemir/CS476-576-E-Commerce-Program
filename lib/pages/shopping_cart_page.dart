@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'favorites_page.dart';
 import 'home_page.dart';
 

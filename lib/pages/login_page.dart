@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:untitled/components/login_button.dart';
 import 'package:untitled/components/my_textfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:untitled/pages/register_page.dart';
-//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:untitled/pages/changepassword_page.dart';
+import 'package:untitled/pages/forgotpassword_page.dart';
+import 'package:untitled/pages/home_page.dart';
+import 'package:untitled/pages/registercustomer_page.dart';
+import 'package:untitled/pages/registerstoreowner_page.dart';
+
 
 
 class LoginPage extends StatelessWidget{
@@ -40,7 +44,7 @@ class LoginPage extends StatelessWidget{
               ),
                 const SizedBox(height: 30),
                 //Welcome back, you've been missed!
-                Text('WELCOME !',
+                Text('WELCOME BACK!',
                     style: TextStyle(
                       color: Colors.grey[700],
                       fontSize: 16,
@@ -73,9 +77,15 @@ class LoginPage extends StatelessWidget{
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey.shade600),
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) =>  const ForgotPasswordPage()));
+                        },
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(color: Colors.blue,
+                          fontWeight: FontWeight.bold,),
+                        ),
                       ),
                     ],
                   ),
@@ -98,11 +108,16 @@ class LoginPage extends StatelessWidget{
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      'Register now',
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   RegisterCustomerPage()));
+                      },
+                      child: const Text(
+                        'Register now',
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -111,7 +126,7 @@ class LoginPage extends StatelessWidget{
 
                 const SizedBox(height: 30),
 
-                //or continue as guess
+                //Do you want to be store owner?
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -123,7 +138,7 @@ class LoginPage extends StatelessWidget{
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   RegisterPage()));
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   RegisterStoreOwnerPage()));
                       },
                       child: const Text(
                         'Create your account',
@@ -151,15 +166,36 @@ class LoginPage extends StatelessWidget{
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                     const SizedBox(width: 4),
-                    const Text(
-                      'Continue as guest',
-                      //return HomePage()
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   const HomePage()));
+                      },
+                      child: const Text(
+                        'Continue as guest',
+                        //return HomePage()
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
+                ),
+
+                const SizedBox(height: 30),
+
+                GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) =>   ChangePasswordPage()));
+                  },
+                  child: const Text(
+                    'change password',
+                    //return HomePage()
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
 
 
