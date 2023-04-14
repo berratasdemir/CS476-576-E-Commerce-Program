@@ -7,13 +7,19 @@ import 'package:untitled/pages/registercustomer_page.dart';
 import '../components/my_textfield.dart';
 
 //stateless was changed to stateful
-class RegisterStoreOwnerPage extends StatelessWidget {
+class RegisterStoreOwnerPage extends StatefulWidget {
   RegisterStoreOwnerPage({super.key});
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmpasswordController = TextEditingController();
+  @override
+  State<RegisterStoreOwnerPage> createState() => _RegisterStoreOwnerPageState();
+}
 
+class _RegisterStoreOwnerPageState extends State<RegisterStoreOwnerPage> {
+  final emailController = TextEditingController();
+
+  final passwordController = TextEditingController();
+
+  final confirmpasswordController = TextEditingController();
 
   //sign user out method
   void signUserOut(){
@@ -33,17 +39,56 @@ class RegisterStoreOwnerPage extends StatelessWidget {
   Future saveUser() async {
     if (passwordConfirmed()) {
       //create user
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      try{
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+        //add user details
+        addUserDetails(emailController.text.trim(),);
+        showDialog(context: context,
+            builder: (context){
+              return AlertDialog(
+                content: const Text("Welcome, your information is saved to the system successfully"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            });
 
 
-      //add user details
-      addUserDetails(emailController.text.trim(),
-      );
+      } on FirebaseAuthException catch(exc){
+        showDialog(context: context,
+            builder: (context){
+              return AlertDialog(
+                content: Text(exc.message.toString()),
+              );
+            });
+
+      }
+
     }
-
+    else{
+      showDialog(context: context,
+          builder: (context){
+            return AlertDialog(
+              content: const Text("Your password and confirm password does not match! Please, enter same password for both field"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+    }
   }
 
   Future addUserDetails(String email) async{

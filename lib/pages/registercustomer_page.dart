@@ -7,13 +7,19 @@ import 'package:untitled/pages/registerstoreowner_page.dart';
 import '../components/my_textfield.dart';
 
 //stateless was changed to stateful
-class RegisterCustomerPage extends StatelessWidget {
-  RegisterCustomerPage({super.key});
+class RegisterCustomerPage extends StatefulWidget {
+  const RegisterCustomerPage({super.key});
 
+  @override
+  State<RegisterCustomerPage> createState() => _RegisterCustomerPageState();
+}
+
+class _RegisterCustomerPageState extends State<RegisterCustomerPage> {
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmpasswordController = TextEditingController();
 
+  final passwordController = TextEditingController();
+
+  final confirmpasswordController = TextEditingController();
 
   //sign user out method
   void signUserOut(){
@@ -30,20 +36,60 @@ class RegisterCustomerPage extends StatelessWidget {
     }
   }
 
+
   Future saveUser() async {
     if (passwordConfirmed()) {
       //create user
+      try{
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-
-
       //add user details
-      addUserDetails(emailController.text.trim(),
-      );
-    }
+      addUserDetails(emailController.text.trim(),);
+      showDialog(context: context,
+          builder: (context){
+            return AlertDialog(
+              content: const Text("Welcome, your information is saved to the system successfully"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
 
+
+      } on FirebaseAuthException catch(exc){
+        showDialog(context: context,
+            builder: (context){
+              return AlertDialog(
+                content: Text(exc.message.toString()),
+              );
+            });
+
+      }
+
+    }
+    else{
+      showDialog(context: context,
+          builder: (context){
+            return AlertDialog(
+              content: const Text("Your password and confirm password does not match! Please, enter same password for both field"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          });
+    }
   }
 
   Future addUserDetails(String email) async{
@@ -106,14 +152,10 @@ class RegisterCustomerPage extends StatelessWidget {
                       obscureText: true,
                     ),
 
+                    const SizedBox(height: 20),
 
-                    const SizedBox(height: 10),
-
-                    const SizedBox(height: 10),
-
-                    //sign in button
+                    //sign-up button
                     SignupButton(onTap: saveUser,),
-
 
                     const SizedBox(height: 20),
 
