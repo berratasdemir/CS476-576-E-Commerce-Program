@@ -6,7 +6,7 @@ import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
 import '../../backend/backend.dart';
 
-import '../../auth/firebase_user_provider.dart';
+import '../../auth/base_auth_user_provider.dart';
 
 import '../../index.dart';
 import '../../main.dart';
@@ -20,8 +20,8 @@ export 'serialization_util.dart';
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
-  SignInFirebaseUser? initialUser;
-  SignInFirebaseUser? user;
+  BaseAuthUser? initialUser;
+  BaseAuthUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -46,7 +46,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(SignInFirebaseUser newUser) {
+  void update(BaseAuthUser newUser) {
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
@@ -69,14 +69,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? LoggedInHomePageWidget() : SignupWidget(),
+          appStateNotifier.loggedIn ? LoggedInHomePageWidget() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
               ? LoggedInHomePageWidget()
-              : SignupWidget(),
+              : LoginWidget(),
         ),
         FFRoute(
           name: 'HomePage',
@@ -98,6 +98,62 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/loggedInHomePage',
           requireAuth: true,
           builder: (context, params) => LoggedInHomePageWidget(),
+        ),
+        FFRoute(
+          name: 'merchantpage',
+          path: '/merchantpage',
+          builder: (context, params) => MerchantpageWidget(),
+        ),
+        FFRoute(
+          name: 'Addproduct',
+          path: '/addproduct',
+          builder: (context, params) => AddproductWidget(),
+        ),
+        FFRoute(
+          name: 'Editproduct',
+          path: '/editproduct',
+          builder: (context, params) => EditproductWidget(),
+        ),
+        FFRoute(
+          name: 'Editproductsubmit',
+          path: '/editproductsubmit',
+          asyncParams: {
+            'proddoc': getDoc(['products'], ProductsRecord.serializer),
+          },
+          builder: (context, params) => EditproductsubmitWidget(
+            proddoc: params.getParam('proddoc', ParamType.Document),
+          ),
+        ),
+        FFRoute(
+          name: 'deletepage',
+          path: '/deletepage',
+          builder: (context, params) => DeletepageWidget(),
+        ),
+        FFRoute(
+          name: 'searchedpage',
+          path: '/searchedpage',
+          asyncParams: {
+            'searchresults':
+                getDocList(['products'], ProductsRecord.serializer),
+          },
+          builder: (context, params) => SearchedpageWidget(
+            search: params.getParam('search', ParamType.String),
+            searchresults: params.getParam<ProductsRecord>(
+                'searchresults', ParamType.Document, true),
+          ),
+        ),
+        FFRoute(
+          name: 'loggedinsearchpage',
+          path: '/loggedinsearchpage',
+          asyncParams: {
+            'searchresults':
+                getDocList(['products'], ProductsRecord.serializer),
+          },
+          builder: (context, params) => LoggedinsearchpageWidget(
+            search: params.getParam('search', ParamType.String),
+            searchresults: params.getParam<ProductsRecord>(
+                'searchresults', ParamType.Document, true),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,
@@ -266,7 +322,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/signup';
+            return '/login';
           }
           return null;
         },

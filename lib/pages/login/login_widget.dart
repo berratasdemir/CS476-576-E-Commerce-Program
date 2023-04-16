@@ -1,4 +1,4 @@
-import '/auth/auth_util.dart';
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -54,14 +54,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Image.asset(
-                      'assets/images/logoTranslation@3x.png',
-                      width: 40.0,
-                      height: 40.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ],
+                  children: [],
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 44.0, 0.0, 0.0),
@@ -282,7 +275,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         onPressed: () async {
                           GoRouter.of(context).prepareAuthEvent();
 
-                          final user = await signInWithEmail(
+                          final user = await authManager.signInWithEmail(
                             context,
                             _model.emailTextController.text,
                             _model.passwordTextController.text,
@@ -291,7 +284,12 @@ class _LoginWidgetState extends State<LoginWidget> {
                             return;
                           }
 
-                          context.goNamedAuth('LoggedInHomePage', mounted);
+                          if (valueOrDefault<bool>(
+                              currentUserDocument?.owner, false)) {
+                            context.pushNamedAuth('merchantpage', mounted);
+                          } else {
+                            context.pushNamedAuth('LoggedInHomePage', mounted);
+                          }
                         },
                         text: 'Login',
                         options: FFButtonOptions(
